@@ -12,11 +12,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - run: curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/bash.deb.sh' | sudo bash
-    - run: curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/gpg/gpg.0607E2621F1564A6.key' | sudo apt-key add -
-    - run: sudo bash -c "curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/config.deb.txt?distro=ubuntu&codename=bionic' > /etc/apt/sources.list.d/isc-kea-1-6.list"
-    - run: sudo apt update -y
-    - run: sudo apt install -y isc-kea-dev libboost-dev
+    - name: Get kea-message-compiler
+      run: |
+        wget https://github.com/zorun/kea-hook-runscript/releases/download/v1.3.3/kea-hook-runscript-1.3.3.tar.gz
+        tar xvf kea-hook-runscript-1.3.3.tar.gz
+        cp kea-hook-runscript-1.3.3/s-messages $GITHUB_WORKSPACE
+      working-directory: /tmp
+    - name: Install packages
+      run: |
+        curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/bash.deb.sh' | sudo bash
+        curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/gpg/gpg.0607E2621F1564A6.key' | sudo apt-key add -
+        sudo bash -c "curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/config.deb.txt?distro=ubuntu&codename=bionic' > /etc/apt/sources.list.d/isc-kea-1-6.list"
+        sudo apt update -y
+        sudo apt install -y isc-kea-dev libboost-dev
     - name: Build
       run: make
     - name: Zipped artifacts
