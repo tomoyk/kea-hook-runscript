@@ -19,7 +19,6 @@ jobs:
         curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/config.deb.txt?distro=ubuntu&codename=bionic' > /etc/apt/sources.list.d/isc-kea-1-6.list
         apt update -y
         apt install -y isc-kea-dev libboost-dev
-      run: sudo apt-get install -y kea-dev libboost-dev
     - name: Build
       run: make
     - name: Zipped artifacts
