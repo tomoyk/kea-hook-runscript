@@ -12,13 +12,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Install packages for build
-      run: |
-        curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/bash.deb.sh' | bash
-        curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/gpg/gpg.0607E2621F1564A6.key' | apt-key add -
-        curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/config.deb.txt?distro=ubuntu&codename=bionic' > /etc/apt/sources.list.d/isc-kea-1-6.list
-        apt update -y
-        apt install -y isc-kea-dev libboost-dev
+    - run: curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/bash.deb.sh' | bash
+    - run: curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/gpg/gpg.0607E2621F1564A6.key' | apt-key add -
+    - run: curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-1-6/cfg/setup/config.deb.txt?distro=ubuntu&codename=bionic' > /etc/apt/sources.list.d/isc-kea-1-6.list
+    - run: apt update -y
+    - run: apt install -y isc-kea-dev libboost-dev
     - name: Build
       run: make
     - name: Zipped artifacts
